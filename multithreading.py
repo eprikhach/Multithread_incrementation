@@ -20,26 +20,10 @@ logger.add('logs.log', level='INFO',
            rotation='1 MB', compression='zip')
 
 
-@logger.catch()
-def locker(func):
-    """Decorator, that implement threading.Lock
-
-    :param func: func, that need to be locked
-    :return: wrapped function
-    """
-    lock = Lock()
-
-    def wrapper(arg):
-        with lock:
-            func(arg)
-
-    return wrapper
-
-
 def main():
     a = 0
+    lock = Lock()
 
-    @locker
     @logger.catch()
     def function(arg):
         """Multithreading incrementation
@@ -51,7 +35,9 @@ def main():
         nonlocal a
 
         for _ in range(arg):
+            lock.acquire()
             a += 1
+            lock.release()
 
     threads = []
     for _ in range(5):
