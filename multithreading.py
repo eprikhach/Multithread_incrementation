@@ -17,12 +17,13 @@ logger.add('logs.log', level='INFO',
            rotation='1 MB', compression='zip')
 
 
-from incr import incrementation
-print(incrementation(5, 1_000_000))
+# from incr import incrementation
+# print(incrementation(5, 1_000_000))
 # Second solution, which use c++ module(atomic vars + multithreading).
 
 
 class Counter:
+    """Class, which help us to avoid global variables."""
 
     def __init__(self):
         self.a = 0
@@ -32,8 +33,8 @@ class Counter:
 def function(arg: int, counter: Counter, lock: Lock):
     """Multithreading incrementation
 
-    :param lock: lock object
-    :param counter:
+    :param lock: Lock class object
+    :param counter: Counter class object
     :param arg: number of incrementation
     :return: None
     """
